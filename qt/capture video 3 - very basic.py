@@ -35,7 +35,6 @@ def capture_video():
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
-    begin_time = stopwatch(begin_time, "point D")
 
     # Release the video capture and writer objects
     cap.release()
