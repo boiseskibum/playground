@@ -13,12 +13,26 @@ class VideoThread(QThread):
 
     def run(self):
         self.is_running = True
+        cam_index = 0
         cap = cv2.VideoCapture(0)
+
+        w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+        h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        fps = cap.get(cv2.CAP_PROP_FPS)
+        fcnt = cap.get(cv2.CAP_PROP_FRAME_COUNT)
+
+        print(f"PRE cap properties - w: {w}, h: {h}, fps: {fps} cam_index: {cam_index}")
+
+        # Set the desired frame rate (FPS)
+        desired_fps = 30  # Set your desired FPS here
+        cap.set(cv2.CAP_PROP_FPS, desired_fps)
 
         # Define the video codec and create a VideoWriter object
         fourcc = cv2.VideoWriter_fourcc(*"XVID")
-        out = cv2.VideoWriter("output.avi", fourcc, 20.0, (640, 480))
+        filename = "capture video 1.mp4"
+        out = cv2.VideoWriter(filename, fourcc, fps, (w, h))
 
+        start_time = cv2.getTickCount()
         while cap.isOpened() and self.is_running:
             ret, frame = cap.read()
             if ret:
@@ -37,8 +51,10 @@ class VideoThread(QThread):
                 self.video_widget.setPixmap(pixmap)
 
                 # Write the frame to the video file
-                out.write(frame)
 
+                out.write(frame)
+                if (cv2.getTickCount() - start_time) / cv2.getTickFrequency() >= 4:
+                    break
                 if cv2.waitKey(1) & 0xFF == ord("q"):
                     break
             else:
@@ -56,6 +72,7 @@ class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
 
+        self.setGeometry(100, 100, 800, 600)  # (x, y, width, height)
         self.start_button = QPushButton("Start")
         self.stop_button = QPushButton("Stop")
         self.video_label = QLabel()

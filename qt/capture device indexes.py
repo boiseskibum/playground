@@ -3,9 +3,13 @@ import cv2
 index = 0
 arr = []
 
-while True:
+while index < 5:
     print(f"checking device index: {index}")
-    cap = cv2.VideoCapture(index)
+    try:
+        cap = cv2.VideoCapture(index)
+    except:
+        print(f"     exception on index {index}")
+
     if not cap.read():
         print(f"    failed to read: {index}")
         break
