@@ -52,7 +52,8 @@ class VideoPlayerWindow(QMainWindow):
 
     def start_video(self):
         print("start_video function")
-        video_file = 'AVC1_30fps_vertical_sample.mp4'  # Replace with the path to your video file
+
+        video_file = 'test_video_mp4.mp4'  # Replace with the path to your video file
         if os.path.isfile('file.txt'):
             print(f"file exists:  {video_file}")
         else:
