@@ -7,19 +7,18 @@ class VideoPlayer(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.video_label1 = QLabel(self)
+        self.central_widget = QWidget(self)
+        self.setCentralWidget(self.central_widget)
+
+        self.video_label1 = QLabel()
         self.video_label1.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.restart_button = QPushButton("Restart", self)
+        self.restart_button = QPushButton("Restart")
         self.restart_button.clicked.connect(self.restart_video)
 
-        central_widget = QWidget(self)
-        central_layout = QVBoxLayout()
+        central_layout = QVBoxLayout(self.central_widget)
         central_layout.addWidget(self.video_label1)
         central_layout.addWidget(self.restart_button)
-        central_widget.setLayout(central_layout)
-
-        self.setCentralWidget(central_widget)
 
         self.cap = cv2.VideoCapture("AVC1_30fps_vertical_sample.mp4")
         self.timer = QTimer(self)
@@ -40,8 +39,8 @@ class VideoPlayer(QMainWindow):
             self.timer.stop()
 
     def restart_video(self):
-        self.cap.set(cv2.CAP_PROP_POS_FRAMES, 0)  # Reset video to the beginning
-        self.timer.start()  # Start the timer again
+        self.cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
+        self.timer.start()
 
 if __name__ == "__main__":
     app = QApplication([])
