@@ -1,6 +1,6 @@
 # Main program
 import os, sys
-from PyQt6.QtGui import QImage, QPixmap
+#from PyQt6.QtGui import QImage, QPixmap
 
 ######################################################################
 # debuggging and logging
@@ -8,6 +8,7 @@ from share import jt_util as util
 
 # logging configuration - the default level if not set is DEBUG
 log = util.jt_logging()
+
 
 log.msg(f'INFO - Valid logging levels are: {util.logging_levels}')
 log.set_logging_level("WARNING")  # this will show errors but not files actually processed
@@ -24,11 +25,11 @@ if not os.path.exists(image_path):
         print(f'   Could not find image_path for: {image_path}')
     else:
         print(f'   found image path: {image_path}')
-        image = QImage(image_path)
+#        image = QImage(image_path)
 
 else:
     log.msg(f'found image path: {image_path}')
-    image = QImage(image_path)
+#    image = QImage(image_path)
 
 #####################
 print(f'\nCalculating basepath stuff')
@@ -49,7 +50,7 @@ def resource_path(relative_path):
 
 # Now use the function to get the path of your resource
 icon_path = resource_path("resources/img/jt.ico")
-if not os.path.exists(image_path):
+if not os.path.exists(icon_path):
     print(f'    DID NOT find calculated path: {icon_path}')
 else:
     print(f'    FOUND calculated path: {icon_path}')
