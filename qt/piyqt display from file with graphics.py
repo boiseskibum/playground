@@ -48,31 +48,43 @@ class VideoPlayer(QMainWindow):
 
             # Set the line properties (e.g., color and width)
 
-            linew = 12
-            Lvalue = self.counter * 2
-            Rvalue  = self.counter * -2
+            linew = 10
+            Lvalue = self.counter * 1
+            Rvalue  = self.counter * -1
 
             penL = QPen(Qt.GlobalColor.darkGreen)  # Red color
             penL.setWidth(linew)  # Line width
             penR = QPen(Qt.GlobalColor.blue)  # Red color
             penR.setWidth(linew)  # Line width
-            penH = QPen(Qt.GlobalColor.magenta)  # Red color
-            penH.setWidth(2)  # Line width
+            penH = QPen(Qt.GlobalColor.black)  # Red color
+            penH.setWidth(1)  # Line width
 
-            painter.setPen(penL)
+            force_max = h/2   # this is for testing only.  will be real force when used
+
+            def y_value_calc (pixmap_h, force_max, force):
+                ratio = abs(force/force_max)   # Use absolute value as the +/- is accounted for below
+                value = int(pixmap_h / 2 + force * ratio)
+                return value
+
+            l_scaled = y_value_calc(h, force_max, Lvalue)
+            r_scaled = y_value_calc(h, force_max, Rvalue)
+
             # Draw lines on the QPixmap
-            painter.drawLine( 0, int(h/2), 0, int( h/2 + Lvalue) )
+            painter.setPen(penL)
+            lxpos = int(linew/2)
+            painter.drawLine( lxpos, int(h/2), lxpos, l_scaled )
 
             painter.setPen(penR)
-            painter.drawLine( w, int(h/2), w, int(h/2 + Rvalue) )
+            rxpos = w - int(linew/2)
+            painter.drawLine( rxpos, int(h/2), rxpos, r_scaled )
 
-            penH.setWidth(2)  # Line width
+            # horizontal lilne
+            penH.setWidth(2)
             painter.setPen(penH)
-            painter.drawLine( int(0 + linew/2), int(h/2 + Lvalue), int(w - linew/2), int(h/2 + Rvalue) )
+            painter.drawLine( lxpos, l_scaled, rxpos, r_scaled )
 
             # End painting
             painter.end()
-
 
 
             self.video_label1.setPixmap(scaled_pixmap)

@@ -1,50 +1,20 @@
-import cv2
+import subprocess
+import sys
+import os
 
-def set_camera_fps():
-    # Open the default webcam
-    cap = cv2.VideoCapture(0)
+def open_file_explorer(path):
+    # Make sure the path is absolute
+    absolute_path = os.path.abspath(path)
 
-    # Check if the camera is opened successfully
-    if not cap.isOpened():
-        print("Failed to open camera")
-        return
+    if sys.platform.startswith('darwin'):
+        # For macOS
+        subprocess.run(['open', absolute_path])
+    elif sys.platform.startswith('win32'):
+        # For Windows
+        subprocess.run(['explorer', absolute_path])
 
-    # Set the desired frame rate (FPS)
-    desired_fps = 30  # Set your desired FPS here
-    cap.set(cv2.CAP_PROP_FPS, desired_fps)
-
-    # Define the video codec and create a VideoWriter object
-    fourcc = cv2.VideoWriter_fourcc(*"XVID")
-    filename = "capture video 1.mp4"
-#    out = cv2.VideoWriter(filename, fourcc, fps, (w, h))
-
-    # Read and display frames from the webcam
-    while True:
-        ret, frame = cap.read()
-        if not ret:
-            break
-
-        cv2.imshow('Webcam', frame)
-
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-
-    w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-    h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-    fps = cap.get(cv2.CAP_PROP_FPS)
-    fcnt = cap.get(cv2.CAP_PROP_FRAME_COUNT)
-
-    print(f"POST cap properties - w: {w}, h: {h}, fps: {fps}, fcnt: {fcnt}, filename: {filename}")
-
-    # Release the video capture object and close windows
-    cap.release()
-    cv2.destroyAllWindows()
-
-# Start capturing video with the desired FPS
-set_camera_fps()
-import psutil
-
-video_devices = psutil.video_devices()
-
-for device in video_devices:
-    print(device)
+# Example path
+path_to_open = "/Documents"  # Replace with your path
+path_to_open = os.getcwd()
+print(f'current working directory{path_to_open}')
+open_file_explorer(path_to_open)
